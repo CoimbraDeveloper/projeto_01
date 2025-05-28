@@ -1,29 +1,21 @@
-name: CI
+name: CI com Docker
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-  build-and-test:
+  docker-ci:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Instalar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Build da imagem Docker
+        run: docker build -t meu-node-app .
 
-      - name: Instalar dependências
-        run: npm install
-
-      - name: Rodar testes
-        run: npm test
-
-      - name: Verificar com ESLint
-        run: npx eslint .
+      - name: Rodar container e executar testes
+        run: docker run meu-node-app
